@@ -36,33 +36,29 @@ messages.append({"role": "user", "content": query})
 2. Send messages + tool definitions to the LLM.
 
 ```python
-response = client.messages.create(
-    model=MODEL, system=SYSTEM, messages=messages,
-    tools=TOOLS, max_tokens=8000,
+response = client.chat.completions.create(
+    model=MODEL,
+    messages=[{"role": "system", "content": SYSTEM}] + messages,
+    tools=TOOLS,
+    max_completion_tokens=4096,
 )
 ```
 
-3. Append the assistant response. Check `stop_reason` -- if the model didn't call a tool, we're done.
+3. Append the assistant response. If the model didn't call a tool, we're done.
 
 ```python
-messages.append({"role": "assistant", "content": response.content})
-if response.stop_reason != "tool_use":
+msg = response.choices[0].message
+messages.append({"role": "assistant", "content": msg.content, "tool_calls": msg.tool_calls})
+if not msg.tool_calls:
     return
 ```
 
-4. Execute each tool call, collect results, append as a user message. Loop back to step 2.
+4. Execute each tool call, append each result as a `tool` message. Loop back to step 2.
 
 ```python
-results = []
-for block in response.content:
-    if block.type == "tool_use":
-        output = run_bash(block.input["command"])
-        results.append({
-            "type": "tool_result",
-            "tool_use_id": block.id,
-            "content": output,
-        })
-messages.append({"role": "user", "content": results})
+for tool_call in msg.tool_calls:
+    output = run_bash(json.loads(tool_call.function.arguments)["command"])
+    messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": output})
 ```
 
 Assembled into one function:
@@ -71,25 +67,21 @@ Assembled into one function:
 def agent_loop(query):
     messages = [{"role": "user", "content": query}]
     while True:
-        response = client.messages.create(
-            model=MODEL, system=SYSTEM, messages=messages,
-            tools=TOOLS, max_tokens=8000,
+        response = client.chat.completions.create(
+            model=MODEL,
+            messages=[{"role": "system", "content": SYSTEM}] + messages,
+            tools=TOOLS,
+            max_completion_tokens=4096,
         )
-        messages.append({"role": "assistant", "content": response.content})
+        msg = response.choices[0].message
+        messages.append({"role": "assistant", "content": msg.content, "tool_calls": msg.tool_calls})
 
-        if response.stop_reason != "tool_use":
+        if not msg.tool_calls:
             return
 
-        results = []
-        for block in response.content:
-            if block.type == "tool_use":
-                output = run_bash(block.input["command"])
-                results.append({
-                    "type": "tool_result",
-                    "tool_use_id": block.id,
-                    "content": output,
-                })
-        messages.append({"role": "user", "content": results})
+        for tool_call in msg.tool_calls:
+            output = run_bash(json.loads(tool_call.function.arguments)["command"])
+            messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": output})
 ```
 
 That's the entire agent in under 30 lines. Everything else in this course layers on top -- without changing the loop.
@@ -98,10 +90,10 @@ That's the entire agent in under 30 lines. Everything else in this course layers
 
 | Component     | Before     | After                          |
 |---------------|------------|--------------------------------|
-| Agent loop    | (none)     | `while True` + stop_reason     |
-| Tools         | (none)     | `bash` (one tool)              |
-| Messages      | (none)     | Accumulating list              |
-| Control flow  | (none)     | `stop_reason != "tool_use"`    |
+| Agent loop    | (none)     | `while True` + tool_calls check |
+| Tools         | (none)     | `bash` (one tool)               |
+| Messages      | (none)     | Accumulating list               |
+| Control flow  | (none)     | `not msg.tool_calls`            |
 
 ## Try It
 

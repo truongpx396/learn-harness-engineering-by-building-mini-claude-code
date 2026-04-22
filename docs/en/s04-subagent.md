@@ -32,13 +32,15 @@ Parent context stays clean. Subagent context is discarded.
 
 ```python
 PARENT_TOOLS = CHILD_TOOLS + [
-    {"name": "task",
-     "description": "Spawn a subagent with fresh context.",
-     "input_schema": {
-         "type": "object",
-         "properties": {"prompt": {"type": "string"}},
-         "required": ["prompt"],
-     }},
+    {"type": "function", "function": {
+        "name": "task",
+        "description": "Spawn a subagent with fresh context.",
+        "parameters": {
+            "type": "object",
+            "properties": {"prompt": {"type": "string"}},
+            "required": ["prompt"],
+        },
+    }},
 ]
 ```
 
@@ -47,28 +49,23 @@ PARENT_TOOLS = CHILD_TOOLS + [
 ```python
 def run_subagent(prompt: str) -> str:
     sub_messages = [{"role": "user", "content": prompt}]
+    last_msg = None
     for _ in range(30):  # safety limit
-        response = client.messages.create(
-            model=MODEL, system=SUBAGENT_SYSTEM,
-            messages=sub_messages,
-            tools=CHILD_TOOLS, max_tokens=8000,
+        response = client.chat.completions.create(
+            model=MODEL,
+            messages=[{"role": "system", "content": SUBAGENT_SYSTEM}] + sub_messages,
+            tools=CHILD_TOOLS,
+            max_completion_tokens=4096,
         )
-        sub_messages.append({"role": "assistant",
-                             "content": response.content})
-        if response.stop_reason != "tool_use":
+        last_msg = response.choices[0].message
+        sub_messages.append({"role": "assistant", "content": last_msg.content, "tool_calls": last_msg.tool_calls})
+        if not last_msg.tool_calls:
             break
-        results = []
-        for block in response.content:
-            if block.type == "tool_use":
-                handler = TOOL_HANDLERS.get(block.name)
-                output = handler(**block.input)
-                results.append({"type": "tool_result",
-                    "tool_use_id": block.id,
-                    "content": str(output)[:50000]})
-        sub_messages.append({"role": "user", "content": results})
-    return "".join(
-        b.text for b in response.content if hasattr(b, "text")
-    ) or "(no summary)"
+        for tool_call in last_msg.tool_calls:
+            handler = TOOL_HANDLERS.get(tool_call.function.name)
+            output = handler(**json.loads(tool_call.function.arguments))
+            sub_messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": str(output)[:50000]})
+    return last_msg.content or "(no summary)"
 ```
 
 The child's entire message history (possibly 30+ tool calls) is discarded. The parent receives a one-paragraph summary as a normal `tool_result`.

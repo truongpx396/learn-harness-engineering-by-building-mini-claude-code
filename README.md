@@ -1,13 +1,14 @@
-[English](./README.md) | [中文](./README-zh.md) | [日本語](./README-ja.md)
-# Learn Claude Code -- Harness Engineering for Real Agents
+# 🤖 Learn Harness Engineering by Building Mini Claude Code
 
-## Agency Comes from the Model. An Agent Product = Model + Harness.
+> **Note:** This is a fork of [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) with all agents migrated from the Anthropic SDK to the **OpenAI SDK** (`openai` Python package). All agents work with any OpenAI-compatible endpoint — cloud APIs (OpenAI, GitHub Models, Azure OpenAI) or local servers (LM Studio, Ollama, GPT4All).
+
+## 🧠 Agency Comes from the Model. An Agent Product = Model + Harness.
 
 Before we talk about code, let's get one thing straight.
 
 **Agency -- the ability to perceive, reason, and act -- comes from model training, not from external code orchestration.** But a working agent product needs both the model and the harness. The model is the driver, the harness is the vehicle. This repo teaches you how to build the vehicle.
 
-### Where Agency Comes From
+### 📜 Where Agency Comes From
 
 At the core of every agent is a neural network -- a Transformer, an RNN, a learned function -- that has been trained, through billions of gradient updates on action-sequence data, to perceive an environment, reason about goals, and take actions. Agency is never granted by the surrounding code. It is learned by the model during training.
 
@@ -27,7 +28,7 @@ The proof is written in history:
 
 Every one of these milestones points to the same fact: **agency -- the ability to perceive, reason, and act -- is trained, not coded.** But every agent also needed an environment to operate in: the Atari emulator, the Dota 2 client, the StarCraft II engine, the IDE and terminal. The model provides intelligence. The environment provides the action space. Together they form a complete agent.
 
-### What an Agent Is NOT
+### ❌ What an Agent Is NOT
 
 The word "agent" has been hijacked by an entire cottage industry of prompt plumbing.
 
@@ -39,7 +40,7 @@ It doesn't. What they build is a Rube Goldberg machine -- an over-engineered, br
 
 Those systems are dead on arrival: fragile, unscalable, fundamentally incapable of generalization. They are the modern resurrection of GOFAI (Good Old-Fashioned AI) -- the symbolic rule systems the field abandoned decades ago, now spray-painted with an LLM veneer. Different packaging, same dead end.
 
-### The Mind Shift: From "Developing Agents" to Developing Harness
+### 💡 The Mind Shift: From "Developing Agents" to Developing Harness
 
 When someone says "I'm developing an agent," they can only mean one of two things:
 
@@ -65,7 +66,7 @@ The model decides. The harness executes. The model reasons. The harness provides
 
 This repo teaches you to build vehicles. Vehicles for coding. But the design patterns generalize to any domain: farm management, hotel operations, manufacturing, logistics, healthcare, education, scientific research. Anywhere a task needs to be perceived, reasoned about, and acted upon -- an agent needs a harness.
 
-### What Harness Engineers Actually Do
+### 🔧 What Harness Engineers Actually Do
 
 If you are reading this repository, you are likely a harness engineer -- and that is a powerful thing to be. Here is your real job:
 
@@ -83,7 +84,7 @@ You are not writing the intelligence. You are building the world the intelligenc
 
 **Build great harnesses. The agent will do the rest.**
 
-### Why Claude Code -- A Masterclass in Harness Engineering
+### 🎓 Why Claude Code — A Masterclass in Harness Engineering
 
 Why does this repository dissect Claude Code specifically?
 
@@ -111,7 +112,7 @@ The lesson is not "copy Claude Code." The lesson is: **the best agent products a
 
 ---
 
-## The Vision: Fill the Universe with Real Agents
+## 🌌 The Vision: Fill the Universe with Real Agents
 
 This is not just about coding agents.
 
@@ -142,13 +143,13 @@ First we fill the workshops. Then the farms, the hospitals, the factories. Then 
 
     User --> messages[] --> LLM --> response
                                       |
-                            stop_reason == "tool_use"?
-                           /                          \
-                         yes                           no
-                          |                             |
-                    execute tools                    return text
+                            msg.tool_calls?
+                           /              \
+                         yes               no
+                          |                 |
+                    execute tools       return text
                     append results
-                    loop back -----------------> messages[]
+                    loop back -------> messages[]
 
 
     That's the minimal loop. Every AI agent needs this loop.
@@ -161,62 +162,61 @@ First we fill the workshops. Then the farms, the hospitals, the factories. Then 
 **12 progressive sessions, from a simple loop to isolated autonomous execution.**
 **Each session adds one harness mechanism. Each mechanism has one motto.**
 
-> **s01** &nbsp; *"One loop & Bash is all you need"* &mdash; one tool + one loop = an agent
+> 🔁 **s01** &nbsp; *"One loop & Bash is all you need"* &mdash; one tool + one loop = an agent
 >
-> **s02** &nbsp; *"Adding a tool means adding one handler"* &mdash; the loop stays the same; new tools register into the dispatch map
+> 🛠️ **s02** &nbsp; *"Adding a tool means adding one handler"* &mdash; the loop stays the same; new tools register into the dispatch map
 >
-> **s03** &nbsp; *"An agent without a plan drifts"* &mdash; list the steps first, then execute; completion doubles
+> 📋 **s03** &nbsp; *"An agent without a plan drifts"* &mdash; list the steps first, then execute; completion doubles
 >
-> **s04** &nbsp; *"Break big tasks down; each subtask gets a clean context"* &mdash; subagents use independent messages[], keeping the main conversation clean
+> 🪄 **s04** &nbsp; *"Break big tasks down; each subtask gets a clean context"* &mdash; subagents use independent messages[], keeping the main conversation clean
 >
-> **s05** &nbsp; *"Load knowledge when you need it, not upfront"* &mdash; inject via tool_result, not the system prompt
+> 📚 **s05** &nbsp; *"Load knowledge when you need it, not upfront"* &mdash; inject via tool_result, not the system prompt
 >
-> **s06** &nbsp; *"Context will fill up; you need a way to make room"* &mdash; three-layer compression strategy for infinite sessions
+> 🗜️ **s06** &nbsp; *"Context will fill up; you need a way to make room"* &mdash; three-layer compression strategy for infinite sessions
 >
-> **s07** &nbsp; *"Break big goals into small tasks, order them, persist to disk"* &mdash; a file-based task graph with dependencies, laying the foundation for multi-agent collaboration
+> 📁 **s07** &nbsp; *"Break big goals into small tasks, order them, persist to disk"* &mdash; a file-based task graph with dependencies, laying the foundation for multi-agent collaboration
 >
-> **s08** &nbsp; *"Run slow operations in the background; the agent keeps thinking"* &mdash; daemon threads run commands, inject notifications on completion
+> ⚡ **s08** &nbsp; *"Run slow operations in the background; the agent keeps thinking"* &mdash; daemon threads run commands, inject notifications on completion
 >
-> **s09** &nbsp; *"When the task is too big for one, delegate to teammates"* &mdash; persistent teammates + async mailboxes
+> 👥 **s09** &nbsp; *"When the task is too big for one, delegate to teammates"* &mdash; persistent teammates + async mailboxes
 >
-> **s10** &nbsp; *"Teammates need shared communication rules"* &mdash; one request-response pattern drives all negotiation
+> 📡 **s10** &nbsp; *"Teammates need shared communication rules"* &mdash; one request-response pattern drives all negotiation
 >
-> **s11** &nbsp; *"Teammates scan the board and claim tasks themselves"* &mdash; no need for the lead to assign each one
+> 🤝 **s11** &nbsp; *"Teammates scan the board and claim tasks themselves"* &mdash; no need for the lead to assign each one
 >
-> **s12** &nbsp; *"Each works in its own directory, no interference"* &mdash; tasks manage goals, worktrees manage directories, bound by ID
+> 🌿 **s12** &nbsp; *"Each works in its own directory, no interference"* &mdash; tasks manage goals, worktrees manage directories, bound by ID
 
 ---
 
-## The Core Pattern
+## ⚙️ The Core Pattern
 
 ```python
 def agent_loop(messages):
     while True:
-        response = client.messages.create(
-            model=MODEL, system=SYSTEM,
-            messages=messages, tools=TOOLS,
+        response = client.chat.completions.create(
+            model=MODEL,
+            messages=[{"role": "system", "content": SYSTEM}] + messages,
+            tools=TOOLS,
+            max_completion_tokens=4096,
         )
-        messages.append({"role": "assistant",
-                         "content": response.content})
+        msg = response.choices[0].message
+        messages.append({"role": "assistant", "content": msg.content,
+                         "tool_calls": msg.tool_calls})
 
-        if response.stop_reason != "tool_use":
+        if not msg.tool_calls:
             return
 
-        results = []
-        for block in response.content:
-            if block.type == "tool_use":
-                output = TOOL_HANDLERS[block.name](**block.input)
-                results.append({
-                    "type": "tool_result",
-                    "tool_use_id": block.id,
-                    "content": output,
-                })
-        messages.append({"role": "user", "content": results})
+        for tool_call in msg.tool_calls:
+            args = json.loads(tool_call.function.arguments)
+            output = TOOL_HANDLERS[tool_call.function.name](**args)
+            messages.append({"role": "tool",
+                             "tool_call_id": tool_call.id,
+                             "content": str(output)})
 ```
 
 Every session layers one harness mechanism on top of this loop -- without changing the loop itself. The loop belongs to the agent. The mechanisms belong to the harness.
 
-## Scope (Important)
+## ⚠️ Scope (Important)
 
 This repository is a 0->1 learning project for harness engineering -- building the environment that surrounds an agent model.
 It intentionally simplifies or omits several production mechanisms:
@@ -229,20 +229,111 @@ It intentionally simplifies or omits several production mechanisms:
 
 Treat the team JSONL mailbox protocol in this repo as a teaching implementation, not a claim about any specific production internals.
 
-## Quick Start
+## 🚀 Quick Start
 
 ```sh
 git clone https://github.com/shareAI-lab/learn-claude-code
 cd learn-claude-code
 pip install -r requirements.txt
-cp .env.example .env   # Edit .env with your ANTHROPIC_API_KEY
+cp .env.example .env   # Edit .env with your OPENAI_API_KEY
 
 python agents/s01_agent_loop.py       # Start here
 python agents/s12_worktree_task_isolation.py  # Full progression endpoint
 python agents/s_full.py               # Capstone: all mechanisms combined
 ```
 
-### Web Platform
+### 💻 Running Locally (no cloud API required)
+
+All agents speak the OpenAI chat-completions protocol. Any local server that exposes a compatible endpoint works out of the box — no GPU required, CPU-only inference is supported by all three options below.
+
+---
+
+#### Option A — 🖥️ LM Studio
+
+[LM Studio](https://lmstudio.ai) provides a GUI for downloading and serving models.
+
+**1. Install & load a model**
+- Download and install [LM Studio](https://lmstudio.ai).
+- In the **Discover** tab, search for a small instruction-tuned model.
+  Good CPU-friendly choices: `Qwen2.5-7B-Instruct`, `Mistral-7B-Instruct`, `Phi-3-mini`.
+- Click **Download** next to your chosen model.
+
+**2. Start the local server**
+- Open the **Developer** tab (`</>` icon in the left sidebar).
+- Select your model from the dropdown and click **Start Server**.
+- LM Studio listens at `http://localhost:1234/v1`. Copy the model identifier shown (e.g. `lmstudio-community/Qwen2.5-7B-Instruct-GGUF`).
+
+**3. Configure `.env`**
+```sh
+OPENAI_API_KEY=lm-studio        # any non-empty string works
+OPENAI_BASE_URL=http://localhost:1234/v1
+MODEL=lmstudio-community/Qwen2.5-7B-Instruct-GGUF
+```
+
+---
+
+#### Option B — 🦙 Ollama
+
+[Ollama](https://ollama.com) is a lightweight CLI that manages and serves models with a single command.
+
+**1. Install Ollama**
+```sh
+# macOS / Linux
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Windows: download the installer from https://ollama.com/download
+```
+
+**2. Pull a model & start the server**
+```sh
+ollama pull qwen2.5:7b          # or: mistral, phi3, llama3.2, gemma2:2b …
+ollama serve                    # starts at http://localhost:11434
+```
+> If you ran `ollama pull` without `ollama serve`, the server is already running in the background — no extra step needed.
+
+**3. Configure `.env`**
+```sh
+OPENAI_API_KEY=ollama           # any non-empty string works
+OPENAI_BASE_URL=http://localhost:11434/v1
+MODEL=qwen2.5:7b                # must match the name you pulled
+```
+
+---
+
+#### Option C — 🌐 GPT4All
+
+[GPT4All](https://www.nomic.ai/gpt4all) offers a desktop app with a built-in API server mode.
+
+**1. Install GPT4All**
+- Download and install the desktop app from [nomic.ai/gpt4all](https://www.nomic.ai/gpt4all).
+
+**2. Download a model & enable the API server**
+- Go to **Models** → browse and download a model (e.g. `Mistral 7B Instruct`).
+- Open **Settings → API Server**, toggle **Enable API Server** on.
+- The server starts at `http://localhost:4891/v1`.
+
+**3. Configure `.env`**
+```sh
+OPENAI_API_KEY=gpt4all          # any non-empty string works
+OPENAI_BASE_URL=http://localhost:4891/v1
+MODEL=Mistral 7B Instruct       # must match the model name shown in the app
+```
+
+---
+
+**4. Run (same for all options)**
+```sh
+python agents/s01_agent_loop.py
+```
+
+> **Tips for CPU inference**
+> - **Under 8 GB RAM:** use 1.5B–3B models — e.g. `Qwen2.5-1.5B-Instruct`, `Llama-3.2-1B-Instruct`.
+> - **8 GB–16 GB RAM:** use 4-bit quantized 7B–8B models — e.g. `Llama-3.1-8B-Instruct (Q4)`, `Mistral-7B-Instruct (Q4)`.
+> - **16 GB+ RAM:** standard 7B–13B models work well without extra quantization.
+> - Keep context length at 4096 or lower in your server settings to reduce RAM pressure.
+> - The agents already cap `max_completion_tokens` at 4096, which is compatible with all small models.
+
+### 🌍 Web Platform
 
 Interactive visualizations, step-through diagrams, source viewer, and documentation.
 
@@ -250,13 +341,13 @@ Interactive visualizations, step-through diagrams, source viewer, and documentat
 cd web && npm install && npm run dev   # http://localhost:3000
 ```
 
-## Learning Path
+## 🗺️ Learning Path
 
 ```
 Phase 1: THE LOOP                    Phase 2: PLANNING & KNOWLEDGE
 ==================                   ==============================
 s01  The Agent Loop          [1]     s03  TodoWrite               [5]
-     while + stop_reason                  TodoManager + nag reminder
+     while + tool_calls check            TodoManager + nag reminder
      |                                    |
      +-> s02  Tool Use            [4]     s04  Subagents            [5]
               dispatch map: name->handler     fresh messages[] per child
@@ -284,22 +375,22 @@ s08  Background Tasks        [6]     s10  Team Protocols          [12]
                                      [N] = number of tools
 ```
 
-## Architecture
+## 🏗️ Architecture
 
 ```
 learn-claude-code/
 |
 |-- agents/                        # Python reference implementations (s01-s12 + s_full capstone)
-|-- docs/{en,zh,ja}/               # Mental-model-first documentation (3 languages)
+|-- docs/{en}/               # Mental-model-first documentation (3 languages)
 |-- web/                           # Interactive learning platform (Next.js)
 |-- skills/                        # Skill files for s05
 +-- .github/workflows/ci.yml      # CI: typecheck + build
 ```
 
-## Documentation
+## 📖 Documentation
 
 Mental-model-first: problem, solution, ASCII diagram, minimal code.
-Available in [English](./docs/en/) | [中文](./docs/zh/) | [日本語](./docs/ja/).
+Available in [English](./docs/en/) 
 
 | Session | Topic | Motto |
 |---------|-------|-------|
@@ -316,7 +407,7 @@ Available in [English](./docs/en/) | [中文](./docs/zh/) | [日本語](./docs/j
 | [s11](./docs/en/s11-autonomous-agents.md) | Autonomous Agents | *Teammates scan the board and claim tasks themselves* |
 | [s12](./docs/en/s12-worktree-task-isolation.md) | Worktree + Task Isolation | *Each works in its own directory, no interference* |
 
-## What's Next -- from understanding to shipping
+## 🔭 What's Next — from understanding to shipping
 
 After the 12 sessions you understand how harness engineering works inside out. Two ways to put that knowledge to work:
 

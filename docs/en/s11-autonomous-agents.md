@@ -28,7 +28,7 @@ Teammate lifecycle with idle cycle:
 | WORK  | <------------- |  LLM  |
 +---+---+                +-------+
     |
-    | stop_reason != tool_use (or idle tool called)
+    | no tool_calls (or idle tool called)
     v
 +--------+
 |  IDLE  |  poll every 5s for up to 60s
@@ -55,8 +55,9 @@ def _loop(self, name, role, prompt):
         # -- WORK PHASE --
         messages = [{"role": "user", "content": prompt}]
         for _ in range(50):
-            response = client.messages.create(...)
-            if response.stop_reason != "tool_use":
+            response = client.chat.completions.create(...)
+            msg = response.choices[0].message
+            if not msg.tool_calls:
                 break
             # execute tools...
             if idle_requested:

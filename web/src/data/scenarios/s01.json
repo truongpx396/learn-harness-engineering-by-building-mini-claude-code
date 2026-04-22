@@ -45,7 +45,7 @@
     {
       "type": "assistant_text",
       "content": "Done! I've created hello.py with the print statement. You can run it with `python hello.py`.",
-      "annotation": "stop_reason != 'tool_use' -> loop breaks, agent responds to user"
+      "annotation": "no tool_calls -> loop breaks, agent responds to user"
     }
   ]
 }

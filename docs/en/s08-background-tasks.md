@@ -81,7 +81,7 @@ def agent_loop(messages: list):
             messages.append({"role": "user",
                 "content": f"<background-results>\n{notif_text}\n"
                            f"</background-results>"})
-        response = client.messages.create(...)
+        response = client.chat.completions.create(...)
 ```
 
 The loop stays single-threaded. Only subprocess I/O is parallelized.

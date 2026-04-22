@@ -1,0 +1,32 @@
+I need three teammates — "analyst", "writer", and "historian" — working in parallel.
+Each must be isolated using `git worktree add` (not git checkout) so they work in
+separate directories and never touch each other's files:
+
+  git worktree add -b wt/analyst   .worktrees/analyst   HEAD
+  git worktree add -b wt/writer    .worktrees/writer    HEAD
+  git worktree add -b wt/historian .worktrees/historian HEAD
+
+Create a task on the board for each teammate before spawning them.
+
+- "analyst": map the agents/ directory structure and count lines of code across all
+  .py files using `wc -l agents/*.py`. Write findings to .worktrees/analyst/findings.md,
+  then mark your task complete and idle.
+
+- "writer": wait for a message from lead containing line-count data, turn it into a
+  clean summary report at .worktrees/writer/report.md, mark your task complete and idle.
+
+- "historian": wait for a message from lead containing a one-paragraph description of
+  s_full.py, write a changelog entry to .worktrees/historian/CHANGELOG.md explaining
+  what s_full adds over earlier sessions, mark your task complete and idle.
+
+While setting the teammates up, also:
+- Start the wc -l count in the background so it runs while you spawn teammates.
+- Use a subagent to read agents/s_full.py and return a one-paragraph description.
+- Load the agent-builder skill so you follow the right patterns throughout.
+
+Once the background job finishes, message "writer" with the line-count output.
+Message "historian" with the subagent's one-paragraph description.
+
+When all three teammates are idle, read your inbox, verify the three output files
+exist, then broadcast a shutdown message and request shutdown for each teammate.
+Remove all three worktrees with `git worktree remove --force` and compact the context.

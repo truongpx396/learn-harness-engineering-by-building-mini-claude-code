@@ -84,19 +84,21 @@ export default function HomePage() {
               <span className="text-orange-300">True</span>
               <span className="text-zinc-500">:</span>
               {"\n"}
-              <span className="text-zinc-300">{"    "}response = client.messages.</span>
+              <span className="text-zinc-300">{"    "}resp = client.chat.completions.</span>
               <span className="text-blue-400">create</span>
               <span className="text-zinc-500">(</span>
-              <span className="text-zinc-300">messages=</span>
-              <span className="text-zinc-300">messages</span>
+              <span className="text-zinc-300">messages=messages</span>
               <span className="text-zinc-500">,</span>
-              <span className="text-zinc-300"> tools=</span>
-              <span className="text-zinc-300">tools</span>
+              <span className="text-zinc-300"> tools=tools</span>
               <span className="text-zinc-500">)</span>
               {"\n"}
+              <span className="text-zinc-300">{"    "}msg = resp.choices[</span>
+              <span className="text-orange-300">0</span>
+              <span className="text-zinc-300">].message</span>
+              {"\n"}
               <span className="text-purple-400">{"    "}if</span>
-              <span className="text-zinc-300"> response.stop_reason != </span>
-              <span className="text-green-400">&quot;tool_use&quot;</span>
+              <span className="text-purple-400"> not</span>
+              <span className="text-zinc-300"> msg.tool_calls</span>
               <span className="text-zinc-500">:</span>
               {"\n"}
               <span className="text-purple-400">{"        "}break</span>
@@ -104,15 +106,15 @@ export default function HomePage() {
               <span className="text-purple-400">{"    "}for</span>
               <span className="text-zinc-300"> tool_call </span>
               <span className="text-purple-400">in</span>
-              <span className="text-zinc-300"> response.content</span>
+              <span className="text-zinc-300"> msg.tool_calls</span>
               <span className="text-zinc-500">:</span>
               {"\n"}
               <span className="text-zinc-300">{"        "}result = </span>
               <span className="text-blue-400">execute_tool</span>
               <span className="text-zinc-500">(</span>
-              <span className="text-zinc-300">tool_call.name</span>
+              <span className="text-zinc-300">tool_call.function.name</span>
               <span className="text-zinc-500">,</span>
-              <span className="text-zinc-300"> tool_call.input</span>
+              <span className="text-zinc-300"> tool_call.function.arguments</span>
               <span className="text-zinc-500">)</span>
               {"\n"}
               <span className="text-zinc-300">{"        "}messages.</span>
