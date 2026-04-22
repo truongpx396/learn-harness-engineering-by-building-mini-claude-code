@@ -1,6 +1,31 @@
-# 🤖 Learn Harness Engineering by Building Mini Claude Code
+# 🤖 Learn Harness Engineering by Building a Mini Claude Code
 
 > **Note:** This is a fork of [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) with all agents migrated from the Anthropic SDK to the **OpenAI SDK** (`openai` Python package). All agents work with any OpenAI-compatible endpoint — cloud APIs (OpenAI, GitHub Models, Azure OpenAI) or local servers (LM Studio, Ollama, GPT4All).
+
+## Table of Contents
+
+- [🧠 Agency Comes from the Model. An Agent Product = Model + Harness.](#-agency-comes-from-the-model-an-agent-product--model--harness)
+  - [📜 Where Agency Comes From](#-where-agency-comes-from)
+  - [❌ What an Agent Is NOT](#-what-an-agent-is-not)
+  - [💡 The Mind Shift: From "Developing Agents" to Developing Harness](#-the-mind-shift-from-developing-agents-to-developing-harness)
+  - [🔧 What Harness Engineers Actually Do](#-what-harness-engineers-actually-do)
+  - [🎓 Why Claude Code — A Masterclass in Harness Engineering](#-why-claude-code--a-masterclass-in-harness-engineering)
+- [🌌 The Vision: Fill the Universe with Real Agents](#-the-vision-fill-the-universe-with-real-agents)
+- [⚙️ The Core Pattern](#️-the-core-pattern)
+- [⚠️ Scope (Important)](#️-scope-important)
+- [🚀 Quick Start](#-quick-start)
+  - [💻 Running Locally (no cloud API required)](#-running-locally-no-cloud-api-required)
+    - [Option A — 🖥️ LM Studio](#option-a--️-lm-studio)
+    - [Option B — 🦙 Ollama](#option-b---ollama)
+    - [Option C — 🌐 GPT4All](#option-c--️-gpt4all)
+  - [🌍 Web Platform](#-web-platform)
+- [🗺️ Learning Path](#️-learning-path)
+- [🏗️ Architecture](#️-architecture)
+- [📖 Documentation](#-documentation)
+- [🔭 What's Next — from understanding to shipping](#-whats-next--from-understanding-to-shipping)
+- [Sister Repo: from *on-demand sessions* to *always-on assistant*](#sister-repo-from-on-demand-sessions-to-always-on-assistant)
+
+---
 
 ## 🧠 Agency Comes from the Model. An Agent Product = Model + Harness.
 
