@@ -257,10 +257,12 @@ Treat the team JSONL mailbox protocol in this repo as a teaching implementation,
 ## 🚀 Quick Start
 
 ```sh
-git clone https://github.com/shareAI-lab/learn-claude-code
-cd learn-claude-code
+git clone https://github.com/truongpx396/learn-harness-engineering-by-building-mini-claude-code
+cd learn-harness-engineering-by-building-mini-claude-code
+python -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env   # Edit .env with your OPENAI_API_KEY
+cp .env.example .env               # Edit .env with your OPENAI_API_KEY
 
 python agents/s01_agent_loop.py       # Start here
 python agents/s12_worktree_task_isolation.py  # Full progression endpoint
@@ -403,7 +405,7 @@ s08  Background Tasks        [6]     s10  Team Protocols          [12]
 ## 🏗️ Architecture
 
 ```
-learn-claude-code/
+learn-harness-engineering-by-building-mini-claude-code/
 |
 |-- agents/                        # Python reference implementations (s01-s12 + s_full capstone)
 |-- docs/{en}/               # Mental-model-first documentation (3 languages)
